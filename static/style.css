@@ -1,0 +1,180 @@
+/* Custom Medical Theme Styles */
+:root {
+    --medical-primary: #0dcaf0;
+    --medical-secondary: #6c757d;
+    --medical-success: #198754;
+    --medical-danger: #dc3545;
+    --medical-warning: #ffc107;
+    --medical-info: #0dcaf0;
+}
+
+/* Enhanced form styling */
+.form-control:focus {
+    border-color: var(--medical-info);
+    box-shadow: 0 0 0 0.25rem rgba(13, 202, 240, 0.25);
+}
+
+/* Custom card enhancements */
+.card {
+    border-radius: 0.75rem;
+    border: none;
+}
+
+.card-header {
+    border-radius: 0.75rem 0.75rem 0 0 !important;
+    font-weight: 600;
+}
+
+/* Progress bar styling */
+.progress {
+    border-radius: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.progress-bar {
+    border-radius: 0.5rem;
+}
+
+/* Badge enhancements */
+.badge {
+    font-size: 0.875em;
+    font-weight: 500;
+}
+
+/* Medical parameter cards */
+.bg-light {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.bg-light .card-body {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 0.5rem;
+}
+
+/* Icon styling */
+.bi {
+    vertical-align: -0.125em;
+}
+
+/* Hover effects */
+.card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.3s ease;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3) !important;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    transition: transform 0.2s ease;
+}
+
+/* Table styling */
+.table-striped > tbody > tr:nth-of-type(odd) > td {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Alert styling */
+.alert {
+    border-radius: 0.75rem;
+    border: none;
+}
+
+/* Navbar enhancements */
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+/* Form validation */
+.is-invalid {
+    border-color: var(--medical-danger);
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+/* Print optimizations */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+    }
+    
+    .btn, .alert, .navbar {
+        display: none !important;
+    }
+    
+    body {
+        font-size: 12px;
+    }
+    
+    .card-header {
+        background: #f8f9fa !important;
+        color: #000 !important;
+    }
+}
+
+/* Responsive enhancements */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .display-5 {
+        font-size: 1.75rem;
+    }
+    
+    .btn-lg {
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem 1rem;
+    }
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Loading states */
+.btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Enhanced focus states for accessibility */
+.form-control:focus,
+.btn:focus,
+a:focus {
+    outline: 2px solid var(--medical-info);
+    outline-offset: 2px;
+}
+
+/* Status indicators */
+.status-healthy {
+    color: var(--medical-success);
+}
+
+.status-warning {
+    color: var(--medical-warning);
+}
+
+.status-danger {
+    color: var(--medical-danger);
+}

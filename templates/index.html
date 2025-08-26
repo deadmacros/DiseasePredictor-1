@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease Prediction System</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="bi bi-heart-pulse me-2"></i>Disease Prediction System
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                <a class="nav-link" href="{{ url_for('about') }}">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Header Section -->
+                <div class="text-center mb-5">
+                    <h1 class="display-4 mb-3">
+                        <i class="bi bi-clipboard2-pulse text-info"></i>
+                        Blood Report Analysis
+                    </h1>
+                    <p class="lead text-muted">
+                        Enter your blood test parameters to get an AI-powered disease prediction
+                    </p>
+                </div>
+
+                <!-- Alert Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Main Form -->
+                <div class="card shadow-lg">
+                    <div class="card-header bg-info">
+                        <h4 class="mb-0 text-white">
+                            <i class="bi bi-file-medical me-2"></i>Blood Parameters
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="POST" action="{{ url_for('predict') }}" id="predictionForm">
+                            <div class="row">
+                                <!-- Hemoglobin -->
+                                <div class="col-md-6 mb-4">
+                                    <label for="Hemoglobin" class="form-label fw-bold">
+                                        <i class="bi bi-droplet text-danger me-1"></i>Hemoglobin
+                                    </label>
+                                    <input type="number" step="0.1" class="form-control form-control-lg" 
+                                           id="Hemoglobin" name="Hemoglobin" required
+                                           placeholder="e.g., 14.2">
+                                    <div class="form-text">
+                                        Normal: {{ parameter_ranges['Hemoglobin']['normal'] }}
+                                    </div>
+                                </div>
+
+                                <!-- RBC -->
+                                <div class="col-md-6 mb-4">
+                                    <label for="RBC" class="form-label fw-bold">
+                                        <i class="bi bi-circle text-danger me-1"></i>RBC Count
+                                    </label>
+                                    <input type="number" step="0.1" class="form-control form-control-lg" 
+                                           id="RBC" name="RBC" required
+                                           placeholder="e.g., 4.8">
+                                    <div class="form-text">
+                                        Normal: {{ parameter_ranges['RBC']['normal'] }}
+                                    </div>
+                                </div>
+
+                                <!-- WBC -->
+                                <div class="col-md-6 mb-4">
+                                    <label for="WBC" class="form-label fw-bold">
+                                        <i class="bi bi-shield-plus text-warning me-1"></i>WBC Count
+                                    </label>
+                                    <input type="number" class="form-control form-control-lg" 
+                                           id="WBC" name="WBC" required
+                                           placeholder="e.g., 7500">
+                                    <div class="form-text">
+                                        Normal: {{ parameter_ranges['WBC']['normal'] }}
+                                    </div>
+                                </div>
+
+                                <!-- Platelet -->
+                                <div class="col-md-6 mb-4">
+                                    <label for="Platelet" class="form-label fw-bold">
+                                        <i class="bi bi-hexagon text-primary me-1"></i>Platelet Count
+                                    </label>
+                                    <input type="number" class="form-control form-control-lg" 
+                                           id="Platelet" name="Platelet" required
+                                           placeholder="e.g., 300000">
+                                    <div class="form-text">
+                                        Normal: {{ parameter_ranges['Platelet']['normal'] }}
+                                    </div>
+                                </div>
+
+                                <!-- ALT -->
+                                <div class="col-md-6 mb-4">
+                                    <label for="ALT" class="form-label fw-bold">
+                                        <i class="bi bi-activity text-success me-1"></i>ALT (Liver Enzyme)
+                                    </label>
+                                    <input type="number" step="0.1" class="form-control form-control-lg" 
+                                           id="ALT" name="ALT" required
+                                           placeholder="e.g., 25">
+                                    <div class="form-text">
+                                        Normal: {{ parameter_ranges['ALT']['normal'] }}
+                                    </div>
+                                </div>
+
+                                <!-- Creatinine -->
+                                <div class="col-md-6 mb-4">
+                                    <label for="Creatinine" class="form-label fw-bold">
+                                        <i class="bi bi-water text-info me-1"></i>Creatinine
+                                    </label>
+                                    <input type="number" step="0.01" class="form-control form-control-lg" 
+                                           id="Creatinine" name="Creatinine" required
+                                           placeholder="e.g., 1.0">
+                                    <div class="form-text">
+                                        Normal: {{ parameter_ranges['Creatinine']['normal'] }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-info btn-lg px-5">
+                                    <i class="bi bi-search me-2"></i>Analyze Blood Report
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Information Card -->
+                <div class="card mt-4 border-warning">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">
+                            <i class="bi bi-info-circle text-warning me-2"></i>Important Disclaimer
+                        </h5>
+                        <p class="card-text text-muted mb-0">
+                            This is an AI-powered prediction tool for educational purposes only. 
+                            Always consult with qualified healthcare professionals for medical diagnosis and treatment.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form validation
+        document.getElementById('predictionForm').addEventListener('submit', function(e) {
+            const inputs = this.querySelectorAll('input[required]');
+            let valid = true;
+            
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    valid = false;
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+            
+            if (!valid) {
+                e.preventDefault();
+                alert('Please fill in all required fields.');
+            }
+        });
+
+        // Remove validation classes on input
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', function() {
+                this.classList.remove('is-invalid');
+            });
+        });
+    </script>
+</body>
+</html>
